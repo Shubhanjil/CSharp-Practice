@@ -1,34 +1,31 @@
-using System; 
+using System;
 
-// define the interface
-public interface IAnimal{
-    void makeSound();
-}
-
-// creating a class to implement the interface
-public class Dog: IAnimal{
-    public void makeSound() {
-        Console.WriteLine("Woof!");
-    }
-}
-public class Cat: IAnimal{
-    public void makeSound() {
-        Console.WriteLine("Meow!");
-    }
-}
-
-public class Program{
-    public static void makeAnimalSound(IAnimal animal){
-        animal.makeSound();
-    }
+// using 'public' modifier
+public interface ILogger {
     
-    public static void Main(){
-        // create instances for dog and cat
-        Dog d = new Dog();
-        Cat c = new Cat();
-        
-        // pass the objects into the method
-        makeAnimalSound(d);
-        makeAnimalSound(c);
+    // implicitly public
+    void LoginInfo(string message);
+    
+    // default interface method which is public
+    // from C# 8.0 we can define implementation of a method inside the interface
+    public void LogError(string error){
+        LogWithFormat("ERROR", error);
+    }
+    private void LogWithFormat(string level, string message){
+        Console.WriteLine($"{level} - {DateTime.Now.ToShortTimeString()}: {message}");
+    }
+}
+
+public class ConsoleLogger : ILogger {
+    public void LoginInfo(string message){
+        Console.WriteLine($"[INFO] - {message}");
+    }
+}
+
+public class Program {
+    public static void Main() {
+        ILogger logger = new ConsoleLogger();
+        logger.LoginInfo("Application started successfully");
+        logger.LogError("Error in connection");
     }
 }
